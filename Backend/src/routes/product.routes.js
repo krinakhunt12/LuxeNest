@@ -22,8 +22,25 @@ import { parseFormDataJSON } from '../middlewares/parseFormData.middleware.js';
 
 const router = express.Router();
 
-// Public routes
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     summary: Get all products
+ *     tags: [Products]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema: { type: integer }
+ *       - in: query
+ *         name: search
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: List of products
+ */
 router.get('/', optionalAuth, getProductsValidator, validate, getProducts);
+
 router.get('/featured', getFeaturedProducts);
 router.get('/new-arrivals', getNewArrivals);
 router.get('/best-sellers', getBestSellers);
