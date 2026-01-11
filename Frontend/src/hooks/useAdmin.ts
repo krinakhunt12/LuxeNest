@@ -80,7 +80,7 @@ export const useAdminProducts = (params: { page?: number; limit?: number; search
         isLoading: productsQuery.isLoading,
         isError: productsQuery.isError,
         refetch: productsQuery.refetch,
-        categories: categoriesQuery.data || [],
+        categories: categoriesQuery.data,
         createProduct: createProductMutation.mutateAsync,
         updateProduct: updateProductMutation.mutateAsync,
         deleteProduct: deleteProductMutation.mutateAsync,

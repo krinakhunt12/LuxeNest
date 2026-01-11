@@ -13,7 +13,8 @@ interface ProductFormProps {
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, product }) => {
-    const { categories, createProduct, updateProduct, isSaving } = useAdminProducts();
+    const { categories: categoriesRaw, createProduct, updateProduct, isSaving } = useAdminProducts();
+    const categories = Array.isArray(categoriesRaw) ? categoriesRaw : (categoriesRaw as any)?.data || [];
 
     const [formData, setFormData] = useState({
         name: '',
