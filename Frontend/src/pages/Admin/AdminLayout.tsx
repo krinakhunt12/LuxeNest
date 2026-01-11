@@ -35,8 +35,9 @@ const AdminLayout: React.FC = () => {
 
     const handleLogout = async () => {
         await logout();
-        navigate('/login');
+        navigate('/admin-login');
     };
+
 
     return (
         <div className="flex h-screen bg-[#FAFAFA] font-sans overflow-hidden">

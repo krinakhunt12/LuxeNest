@@ -1,10 +1,9 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, User, Sparkles } from 'lucide-react';
 
 const AIAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<{role: 'user' | 'bot', text: string}[]>([
+  const [messages, setMessages] = useState<{ role: 'user' | 'bot', text: string }[]>([
     { role: 'bot', text: "Hello! I'm your LuxeNest Design Assistant. How can I help you style your home today?" }
   ]);
   const [input, setInput] = useState('');
@@ -17,16 +16,33 @@ const AIAssistant: React.FC = () => {
     }
   }, [messages, isTyping]);
 
+  const getDesignAdvice = async (userPrompt: string) => {
+    // Basic automated response for now
+    await new Promise(resolve => setTimeout(resolve, 800)); // Simulate thinking
+    const lowerPrompt = userPrompt.toLowerCase();
+
+    if (lowerPrompt.includes('price') || lowerPrompt.includes('cost')) {
+      return "For pricing and availability, please visit our Shop page. We offer competitive rates for premium architectural hardware.";
+    } else if (lowerPrompt.includes('handle') || lowerPrompt.includes('knob')) {
+      return "Architectural hardware like handles and knobs are the 'jewelry' of your home. I recommend matching your finishes across the room for a cohesive look.";
+    } else if (lowerPrompt.includes('thank')) {
+      return "You're very welcome! Let me know if you need any more design advice.";
+    }
+
+    return "That's a great question! For detailed interior design consultations and premium hardware solutions, our experts suggest visiting our showroom or exploring the latest arrivals in our Shop.";
+  };
+
+
   const handleSend = async () => {
     if (!input.trim()) return;
     const userMsg = input;
     setInput('');
     setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
-    
+
     setIsTyping(true);
     const botResponse = await getDesignAdvice(userMsg);
     setIsTyping(false);
-    
+
     setMessages(prev => [...prev, { role: 'bot', text: botResponse }]);
   };
 
@@ -55,11 +71,10 @@ const AIAssistant: React.FC = () => {
           <div ref={scrollRef} className="flex-grow overflow-y-auto p-4 space-y-4 no-scrollbar bg-gray-50">
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] p-3 rounded-2xl text-sm ${
-                  m.role === 'user' 
-                  ? 'bg-[#1F2937] text-white rounded-tr-none' 
+                <div className={`max-w-[85%] p-3 rounded-2xl text-sm ${m.role === 'user'
+                  ? 'bg-[#1F2937] text-white rounded-tr-none'
                   : 'bg-white text-gray-700 shadow-sm border border-gray-200 rounded-tl-none'
-                }`}>
+                  }`}>
                   {m.text}
                 </div>
               </div>
@@ -80,15 +95,15 @@ const AIAssistant: React.FC = () => {
           {/* Input */}
           <div className="p-4 border-t bg-white">
             <div className="relative flex items-center">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Ask about decor tips..."
                 className="w-full bg-gray-100 rounded-full py-3 px-4 pr-12 text-sm focus:outline-none focus:ring-1 focus:ring-[#D4AF37]"
               />
-              <button 
+              <button
                 onClick={handleSend}
                 className="absolute right-2 p-2 text-[#D4AF37] hover:text-[#1F2937] transition-colors"
               >
@@ -98,7 +113,7 @@ const AIAssistant: React.FC = () => {
           </div>
         </div>
       ) : (
-        <button 
+        <button
           onClick={() => setIsOpen(true)}
           className="w-16 h-16 bg-[#1F2937] text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-[#D4AF37] transition-all transform hover:scale-110 group"
         >

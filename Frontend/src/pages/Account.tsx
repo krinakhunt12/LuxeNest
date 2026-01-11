@@ -4,6 +4,7 @@ import { Package, User as UserIcon, Heart, Settings, LogOut, RefreshCw, X, Eye, 
 import { ProfileSettings } from "./ProfileSettings";
 import { Preferences } from "./Preferences";
 import { userService } from "../services/userService";
+import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 
 type AccountSection = 'orders' | 'profile' | 'wishlist' | 'preferences';
@@ -14,6 +15,7 @@ export const Account: React.FC = () => {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -340,7 +342,17 @@ export const Account: React.FC = () => {
             >
               <Settings size={18} /> <span>Preferences</span>
             </button>
-            <div className="pt-8 px-4"><Link to="/login" className="flex items-center space-x-2 text-red-500 font-bold text-xs uppercase tracking-widest"><LogOut size={16} /> <span>Logout</span></Link></div>
+            <div className="pt-8 px-4">
+              <button
+                onClick={async () => {
+                  await logout();
+                  navigate('/login');
+                }}
+                className="flex items-center space-x-2 text-red-500 font-bold text-xs uppercase tracking-widest cursor-pointer hover:underline"
+              >
+                <LogOut size={16} /> <span>Logout</span>
+              </button>
+            </div>
           </div>
           <div className="lg:col-span-3 space-y-8">
             {renderContent()}
