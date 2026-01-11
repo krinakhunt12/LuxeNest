@@ -4,9 +4,10 @@ LuxeNest is a high-end e-commerce platform dedicated to premium architectural ha
 
 ## 🚀 Live Links
 
-- **Frontend**: [http://localhost:5173](http://localhost:5173)
-- **Backend API**: [http://localhost:5000/api](http://localhost:5000/api)
-- **API Documentation (Swagger)**: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
+- **Frontend**: [https://luxenest-mshr.vercel.app](https://luxenest-mshr.vercel.app) (Assuming Vercel for frontend)
+- **Backend API**: [https://luxenest-mshr.onrender.com/api](https://luxenest-mshr.onrender.com/api)
+- **API Documentation (Swagger)**: [https://luxenest-mshr.onrender.com/api-docs](https://luxenest-mshr.onrender.com/api-docs)
+
 
 ---
 
@@ -78,8 +79,9 @@ npm run dev
 ---
 
 ## 📄 API Documentation
-The API is documented using Swagger. Once the backend is running, visit:
-`http://localhost:5000/api-docs`
+The API is documented using Swagger. Visit:
+`https://luxenest-mshr.onrender.com/api-docs`
+
 
 Features included in documentation:
 - **Auth**: Login, Register, Profile
