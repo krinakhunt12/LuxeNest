@@ -1,0 +1,66 @@
+{
+  "layout": {
+    "topBar": {
+      "phone": "+1 (800) LUXENEST",
+      "email": "hello@luxenest.com",
+      "logIn": "Iniciar Sesión",
+      "joinNow": "Únete Ahora"
+    },
+    "header": {
+      "home": "Inicio",
+      "shop": "Tienda",
+      "about": "Acerca de",
+      "contact": "Contacto",
+      "rooms": "Habitaciones",
+      "featured": "Destacados",
+      "livingRoom": "Sala de Estar",
+      "bedroom": "Dormitorio",
+      "diningRoom": "Comedor",
+      "office": "Oficina",
+      "newArrivals": "Nuevos Llegados",
+      "onSale": "En Oferta",
+      "bestSellers": "Más Vendidos",
+      "promoText": "La Colección de Verano está aquí. Obtén 20% de descuento en todos los muebles de exterior."
+    },
+    "search": {
+      "title": "¿Qué estás buscando?",
+      "placeholder": "Buscar productos, categorías...",
+      "trending": "Tendencias:",
+      "trendingItems": {
+        "velvetSofa": "Sofá de Terciopelo",
+        "loungeChair": "Sillón",
+        "oakDesk": "Escritorio de Roble",
+        "lighting": "Iluminación"
+      }
+    },
+    "mobileMenu": {
+      "home": "Inicio",
+      "shop": "Tienda",
+      "aboutUs": "Acerca de Nosotros",
+      "contact": "Contacto",
+      "account": "Cuenta"
+    },
+    "footer": {
+      "description": "Elevando hogares con muebles atemporales y diseño contemporáneo. Creemos en la artesanía de alta calidad y el lujo sostenible para cada espacio vital.",
+      "quickLinks": "Enlaces Rápidos",
+      "shopAll": "Tienda Completa",
+      "ourStory": "Nuestra Historia",
+      "contactUs": "Contáctanos",
+      "account": "Cuenta",
+      "login": "Iniciar Sesión",
+      "signUp": "Registrarse",
+      "wishlist": "Lista de Deseos",
+      "newsletter": "Boletín",
+      "newsletterDescription": "Suscríbete para inspiración de diseño y acceso anticipado a ofertas.",
+      "emailPlaceholder": "Ingresa tu correo",
+      "joinUs": "Únete",
+      "copyright": "© 2024 LuxeNest Interior. Todos los Derechos Reservados."
+    },
+    "notFound": {
+      "title": "404 - Espacio No Encontrado",
+      "message": "Esta habitación aún no existe.",
+      "backToHome": "Volver al Inicio"
+    }
+  }
+}
+

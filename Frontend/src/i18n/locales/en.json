@@ -1,0 +1,114 @@
+{
+  "layout": {
+    "topBar": {
+      "phone": "+1 (800) LUXENEST",
+      "email": "hello@luxenest.com",
+      "logIn": "Log In",
+      "joinNow": "Join Now"
+    },
+    "header": {
+      "home": "Home",
+      "shop": "Shop",
+      "about": "About",
+      "contact": "Contact",
+      "rooms": "Rooms",
+      "featured": "Featured",
+      "livingRoom": "Living Room",
+      "bedroom": "Bedroom",
+      "diningRoom": "Dining Room",
+      "office": "Office",
+      "newArrivals": "New Arrivals",
+      "onSale": "On Sale",
+      "bestSellers": "Best Sellers",
+      "promoText": "The Summer Collection is here. Get 20% off all outdoor furniture."
+    },
+    "search": {
+      "title": "What are you looking for?",
+      "placeholder": "Search products, categories...",
+      "trending": "Trending:",
+      "trendingItems": {
+        "velvetSofa": "Velvet Sofa",
+        "loungeChair": "Lounge Chair",
+        "oakDesk": "Oak Desk",
+        "lighting": "Lighting"
+      }
+    },
+    "mobileMenu": {
+      "home": "Home",
+      "shop": "Shop",
+      "aboutUs": "About Us",
+      "contact": "Contact",
+      "account": "Account"
+    },
+    "footer": {
+      "description": "Elevating homes with timeless furniture and contemporary design. We believe in high-quality craftsmanship and sustainable luxury for every living space.",
+      "quickLinks": "Quick Links",
+      "shopAll": "Shop All",
+      "ourStory": "Our Story",
+      "contactUs": "Contact Us",
+      "account": "Account",
+      "login": "Login",
+      "signUp": "Sign Up",
+      "wishlist": "Wishlist",
+      "newsletter": "Newsletter",
+      "newsletterDescription": "Subscribe for design inspiration and early access to sales.",
+      "emailPlaceholder": "Enter your email",
+      "joinUs": "Join Us",
+      "copyright": "© 2024 LuxeNest Interior. All Rights Reserved."
+    },
+    "notFound": {
+      "title": "404 - Space Not Found",
+      "message": "This room doesn't exist yet.",
+      "backToHome": "Back to Home"
+    }
+  },
+  "admin": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "orders": "Orders",
+      "customers": "Customers",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "dashboard": {
+      "title": "Dashboard Overview",
+      "subtitle": "Welcome back, here's what's happening today.",
+      "stats": {
+        "revenue": "Total Revenue",
+        "orders": "Total Orders",
+        "customers": "Total Customers",
+        "growth": "Growth"
+      },
+      "recentOrders": "Recent Orders",
+      "viewAll": "View All"
+    },
+    "products": {
+      "title": "Products",
+      "subtitle": "Manage your inventory and catalog items.",
+      "addNew": "Add New Product",
+      "searchPlaceholder": "Search products...",
+      "table": {
+        "product": "Product",
+        "category": "Category",
+        "price": "Price",
+        "stock": "Stock",
+        "status": "Status",
+        "actions": "Actions"
+      }
+    },
+    "orders": {
+      "title": "Orders",
+      "subtitle": "Track and manage customer orders across all channels.",
+      "searchPlaceholder": "Search by Order ID or Customer...",
+      "table": {
+        "id": "Order ID",
+        "customer": "Customer",
+        "date": "Date",
+        "status": "Status",
+        "items": "Items",
+        "total": "Total"
+      }
+    }
+  }
+}
