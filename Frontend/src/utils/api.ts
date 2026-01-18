@@ -8,15 +8,18 @@ const api = axios.create({
     baseURL: API_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
     },
     withCredentials: true,
+    timeout: 10000, // 10 second timeout
+    decompress: true, // Enable gzip decompression
 });
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
     (config) => {
-        // Start loading if not specifically disabled in config
-        if (!(config as any).hideLoader) {
+        // Only show loading for user-initiated requests, not background refetches
+        if (!(config as any).hideLoader && !(config as any).isBackground) {
             useLoadingStore.getState().startLoading();
         }
 
@@ -35,13 +38,15 @@ api.interceptors.request.use(
 // Response interceptor for error handling
 api.interceptors.response.use(
     (response) => {
-        if (!(response.config as any).hideLoader) {
+        // Only stop loading for user-initiated requests
+        if (!(response.config as any).hideLoader && !(response.config as any).isBackground) {
             useLoadingStore.getState().stopLoading();
         }
         return response;
     },
     (error) => {
-        if (!(error.config as any).hideLoader) {
+        // Only stop loading for user-initiated requests
+        if (!(error.config as any).hideLoader && !(error.config as any).isBackground) {
             useLoadingStore.getState().stopLoading();
         }
 

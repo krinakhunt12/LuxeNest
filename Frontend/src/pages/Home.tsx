@@ -1,12 +1,13 @@
 import Hero from "../components/Home/Hero";
 import { Link } from "react-router-dom";
-import { useFeaturedProducts, useCategories } from "../hooks/useProducts";
+import { useHomeData } from "../hooks/useProducts";
 import ProductCard from "../components/Products/ProductCard";
 import { ArrowRight } from "lucide-react";
 
 export const Home: React.FC = () => {
-  const { data: featuredProducts = [], isLoading: productsLoading } = useFeaturedProducts();
-  const { data: categories = [], isLoading: categoriesLoading } = useCategories();
+  const { data: homeData, isLoading } = useHomeData();
+  const categories = homeData?.categories || [];
+  const featuredProducts = homeData?.featuredProducts || [];
 
   return (
     <div>
@@ -21,7 +22,7 @@ export const Home: React.FC = () => {
             <p className="text-gray-500 max-w-xl mx-auto">Explore our meticulously curated collections designed to bring elegance and functionality to every room in your home.</p>
           </div>
 
-          {categoriesLoading ? (
+          {isLoading ? (
             <div className="flex justify-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37]"></div>
             </div>
