@@ -34,38 +34,37 @@ import swaggerJsdoc from 'swagger-jsdoc';
 const app = express();
 
 const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'LuxeNest API Documentation',
-      version: '1.0.0',
-      description: 'API for Premium Hardware & Interior Solutions e-commerce platform',
-      contact: {
-        name: 'LuxeNest Support',
-        email: 'support@luxenest.com'
-      }
-    },
-    servers: [
-      {
-        url: 'https://luxenest-mshr.onrender.com',
-        description: 'Production server'
-      },
-      {
-        url: 'http://localhost:5000',
-        description: 'Development server'
-      }
-    ],
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT'
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'LuxeNest API Documentation',
+            version: '1.0.0',
+            description: 'API for Premium Hardware & Interior Solutions e-commerce platform',
+            contact: {
+                name: 'LuxeNest Support',
+                email: 'support@luxenest.com'
+            }
+        },
+        servers: [{
+                url: 'https://luxenest-mshr.onrender.com',
+                description: 'Production server'
+            },
+            {
+                url: 'http://localhost:5000',
+                description: 'Development server'
+            }
+        ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT'
+                }
+            }
         }
-      }
-    }
-  },
-  apis: ['./src/routes/*.js']
+    },
+    apis: ['./src/routes/*.js']
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
@@ -83,22 +82,22 @@ app.use(mongoSanitize());
 // CORS configuration
 // CORS configuration
 const allowedOrigins = [
-  'http://localhost:5173',
-  'https://luxe-nest-neon.vercel.app',
-  process.env.FRONTEND_URL
+    'http://localhost:5173',
+    'https://luxe-nest-nine.vercel.app',
+    process.env.FRONTEND_URL
 ].filter(Boolean);
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+    origin: function(origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Body parser
@@ -110,29 +109,29 @@ app.use(compression());
 
 // Logging
 if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
+    app.use(morgan('dev'));
 } else {
-  app.use(morgan('combined'));
+    app.use(morgan('combined'));
 }
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
-  message: 'Too many requests from this IP, please try again later.',
-  standardHeaders: true,
-  legacyHeaders: false,
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
+    max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
+    message: 'Too many requests from this IP, please try again later.',
+    standardHeaders: true,
+    legacyHeaders: false,
 });
 
 app.use('/api/', limiter);
 
 // Health check
 app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
+    res.status(200).json({
+        status: 'OK',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
 });
 
 // API Routes
@@ -150,46 +149,46 @@ app.use('/api/search', searchRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found'
-  });
+    res.status(404).json({
+        success: false,
+        message: 'Route not found'
+    });
 });
 
 // Error handler (must be last)
 app.use(errorHandler);
 
 // Database connection
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(
-      process.env.NODE_ENV === 'production'
-        ? process.env.MONGODB_URI_PROD
-        : process.env.MONGODB_URI || 'mongodb://localhost:27017/luxenest'
-    );
-    logger.info(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    logger.error(`Error: ${error.message}`);
-    process.exit(1);
-  }
+const connectDB = async() => {
+    try {
+        const conn = await mongoose.connect(
+            process.env.NODE_ENV === 'production' ?
+            process.env.MONGODB_URI_PROD :
+            process.env.MONGODB_URI || 'mongodb://localhost:27017/luxenest'
+        );
+        logger.info(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        logger.error(`Error: ${error.message}`);
+        process.exit(1);
+    }
 };
 
 // Start server
 const PORT = process.env.PORT || 5000;
 
-const startServer = async () => {
-  await connectDB();
-  app.listen(PORT, () => {
-    logger.info(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-  });
+const startServer = async() => {
+    await connectDB();
+    app.listen(PORT, () => {
+        logger.info(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+    });
 };
 
 startServer();
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
-  logger.error(`Unhandled Rejection: ${err.message}`);
-  process.exit(1);
+    logger.error(`Unhandled Rejection: ${err.message}`);
+    process.exit(1);
 });
 
 export default app;
