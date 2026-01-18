@@ -83,14 +83,22 @@ app.use(mongoSanitize());
 const allowedOrigins = [
     'http://localhost:5173',
     'https://luxe-nest-rho.vercel.app',
-    'https://luxe-nest-rho.vercel.app/',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
 app.use(cors({
     origin: function(origin, callback) {
+        console.log('CORS Origin:', origin); // Debug logging
+        console.log('Allowed origins:', allowedOrigins);
+
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
+
+        // Temporarily allow all Vercel domains for debugging
+        if (origin && origin.includes('vercel.app')) {
+            console.log('Allowing Vercel domain:', origin);
+            return callback(null, true);
+        }
 
         // Normalize origin by removing trailing slash
         const normalizedOrigin = origin.replace(/\/$/, '');
@@ -101,6 +109,31 @@ app.use(cors({
             return normalizedOrigin === normalizedAllowed;
         });
 
+        console.log('Is allowed:', isAllowed); // Debug logging
+
+        if (isAllowed) {
+            callback(null, true);
+        } else {
+            console.log('CORS blocked for origin:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
+}));
+
+// Handle preflight requests explicitly
+app.options('*', cors({
+    origin: function(origin, callback) {
+        if (!origin || origin.includes('vercel.app')) {
+            return callback(null, true);
+        }
+        const normalizedOrigin = origin.replace(/\/$/, '');
+        const isAllowed = allowedOrigins.some(allowed => {
+            const normalizedAllowed = allowed.replace(/\/$/, '');
+            return normalizedOrigin === normalizedAllowed;
+        });
         if (isAllowed) {
             callback(null, true);
         } else {
@@ -108,8 +141,8 @@ app.use(cors({
         }
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }));
 
 // Body parser
