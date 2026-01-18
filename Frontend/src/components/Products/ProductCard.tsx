@@ -86,6 +86,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             disabled={(product as any).stock === 0}
             className={`w-full bg-white text-black py-3 text-xs font-bold uppercase tracking-widest shadow-lg flex items-center justify-center hover:bg-black hover:text-white transition-all hover-scale ${(product as any).stock === 0 ? 'opacity-50 cursor-not-allowed' : ''
               }`}
+            aria-label={`Add ${product.name} to cart`}
           >
             <ShoppingBag size={14} className="mr-2 transition-transform group-hover:scale-110" />
             {(product as any).stock === 0 ? 'Out of Stock' : 'Add to Cart'}
@@ -96,12 +97,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <button
             onClick={handleToggleWishlist}
             className={`p-2 rounded-full shadow-md transition-all hover-scale ${isWishlisted ? 'bg-red-500 text-white animate-bounce' : 'bg-white text-gray-500 hover:text-[#D4AF37]'}`}
+            aria-label={isWishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
           >
             <Heart size={16} fill={isWishlisted ? "currentColor" : "none"} className="transition-all" />
           </button>
           <Link
             to={`/product/${productId}`}
             className="bg-white p-2 rounded-full shadow-md hover:text-[#D4AF37] transition-all hover-scale"
+            aria-label={`View details for ${product.name}`}
           >
             <Eye size={16} />
           </Link>
