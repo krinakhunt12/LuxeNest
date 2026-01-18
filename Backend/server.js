@@ -80,16 +80,28 @@ app.use(xss());
 app.use(mongoSanitize());
 
 // CORS configuration
-// CORS configuration
 const allowedOrigins = [
     'http://localhost:5173',
+    'https://luxe-nest-rho.vercel.app',
     'https://luxe-nest-rho.vercel.app/',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
 app.use(cors({
     origin: function(origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+
+        // Normalize origin by removing trailing slash
+        const normalizedOrigin = origin.replace(/\/$/, '');
+
+        // Check if the normalized origin is in our allowed list
+        const isAllowed = allowedOrigins.some(allowed => {
+            const normalizedAllowed = allowed.replace(/\/$/, '');
+            return normalizedOrigin === normalizedAllowed;
+        });
+
+        if (isAllowed) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
