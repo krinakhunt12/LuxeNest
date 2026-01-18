@@ -239,7 +239,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
                         </h2>
                         <p className="text-gray-500 text-sm">Fill in the details to {product ? 'update' : 'create'} the product.</p>
                     </div>
-                    <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                    <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Close form">
                         <X size={24} className="text-gray-400" />
                     </button>
                 </div>
@@ -314,7 +314,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
                                     <div className="relative mt-1">
                                         <Listbox.Button className="relative w-full px-4 py-3 text-left bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-[#D4AF37]/20 focus:border-[#D4AF37] outline-none transition-all font-medium">
                                             <span className="block truncate capitalize text-gray-700">
-                                                {categories.find(cat => cat._id === formData.category)?.name || 'Select Category'}
+                                                {categories.find((cat: any) => cat._id === formData.category)?.name || 'Select Category'}
                                             </span>
                                             <span className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                                                 <ChevronDown size={18} className="text-gray-400" />
@@ -327,7 +327,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
                                             leaveTo="opacity-0"
                                         >
                                             <Listbox.Options className="absolute z-50 w-full py-2 mt-2 overflow-auto bg-white border border-gray-100 rounded-2xl shadow-2xl max-h-60 focus:outline-none sm:text-sm">
-                                                {categories.map((cat) => (
+                                                {categories.map((cat: any) => (
                                                     <Listbox.Option
                                                         key={cat._id}
                                                         className={({ active }) =>
@@ -360,6 +360,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
                                                 type="button"
                                                 onClick={() => removeImage(index)}
                                                 className="absolute top-1 right-1 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                                aria-label="Remove image"
                                             >
                                                 <Trash2 size={14} />
                                             </button>
@@ -388,6 +389,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
                                                 ? 'bg-[#D4AF37]/10 ring-2 ring-[#D4AF37]'
                                                 : 'bg-gray-50 hover:bg-gray-100'
                                                 }`}
+                                            aria-label={`${selectedColors.includes(color.name) ? 'Remove' : 'Add'} ${color.name} color`}
                                         >
                                             <div
                                                 className={`w-10 h-10 rounded-full transition-transform ${selectedColors.includes(color.name) ? 'scale-110' : 'group-hover:scale-105'
@@ -415,6 +417,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
                                             ? 'bg-[#D4AF37]/10 ring-2 ring-[#D4AF37]'
                                             : 'bg-gray-50 hover:bg-gray-100'
                                             }`}
+                                        aria-label="Add custom color"
                                     >
                                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500 via-yellow-500 to-blue-500 flex items-center justify-center">
                                             <Plus size={20} className="text-white font-bold" />
@@ -487,6 +490,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
                                                             type="button"
                                                             onClick={() => toggleColor(color)}
                                                             className="ml-1 text-red-500 hover:text-red-700"
+                                                            aria-label={`Remove ${color} color`}
                                                         >
                                                             <X size={16} />
                                                         </button>

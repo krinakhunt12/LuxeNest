@@ -35,7 +35,7 @@ interface LayoutProps {
   isSearchOpen: boolean;
   searchQuery: string;
   isScrolled: boolean;
-  searchInputRef: React.RefObject<HTMLInputElement>;
+  searchInputRef: React.RefObject<HTMLInputElement | null>;
   onMenuToggle: () => void;
   onSearchToggle: () => void;
   onSearchQueryChange: (value: string) => void;
@@ -98,6 +98,7 @@ const Layout: React.FC<LayoutProps> = ({
           <button
             onClick={onSearchToggle}
             className="absolute top-8 right-8 p-4 hover:bg-gray-100 rounded-full transition-all hover-scale hover-rotate-90"
+            aria-label="Close search"
           >
             <X size={32} />
           </button>
@@ -114,7 +115,7 @@ const Layout: React.FC<LayoutProps> = ({
                 onChange={(e) => onSearchQueryChange(e.target.value)}
                 className="w-full bg-transparent border-b-2 border-gray-100 py-6 text-2xl md:text-5xl font-light serif outline-none focus:border-[#D4AF37] transition-all"
               />
-              <button type="submit" className="absolute right-0 top-1/2 -translate-y-1/2 p-4 text-[#D4AF37]">
+              <button type="submit" className="absolute right-0 top-1/2 -translate-y-1/2 p-4 text-[#D4AF37]" aria-label="Submit search">
                 <Search size={32} />
               </button>
             </form>
@@ -128,6 +129,7 @@ const Layout: React.FC<LayoutProps> = ({
                   onClick={() => onTrendingClick(tag)}
                   className="text-xs uppercase tracking-widest hover:text-[#D4AF37] transition-all hover-scale"
                   style={{ animationDelay: `${(index + 1) * 0.1}s` }}
+                  aria-label={`Search for ${tag}`}
                 >
                   {tag}
                 </button>
@@ -175,7 +177,7 @@ const Layout: React.FC<LayoutProps> = ({
       {/* Header */}
       <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-3' : 'bg-white/95 py-5'} animate-fade-in-down`}>
         <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
-          <button className="md:hidden" onClick={onMenuToggle}>
+          <button className="md:hidden" onClick={onMenuToggle} aria-label="Toggle menu">
             <MenuIcon size={24} />
           </button>
 
@@ -273,6 +275,7 @@ const Layout: React.FC<LayoutProps> = ({
             <button
               onClick={onSearchToggle}
               className="hover:text-[#D4AF37] transition-colors"
+              aria-label="Open search"
             >
               <Search size={20} />
             </button>
@@ -284,7 +287,7 @@ const Layout: React.FC<LayoutProps> = ({
                 </span>
               )}
             </Link>
-            <button onClick={onOpenCart} className="hover:text-[#D4AF37] relative transition-all hover-scale">
+            <button onClick={onOpenCart} className="hover:text-[#D4AF37] relative transition-all hover-scale" aria-label={`Open cart (${cartCount} items)`}>
               <ShoppingBag size={22} className="transition-transform hover:scale-110" />
               {cartCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-[#D4AF37] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold cart-count-pop animate-bounce">
@@ -359,6 +362,7 @@ const Layout: React.FC<LayoutProps> = ({
                           }}
                           className={`flex items-center space-x-2 px-4 py-2 text-sm transition-colors w-full text-left ${active ? 'bg-red-50 text-red-600' : 'text-red-600'
                             }`}
+                          aria-label="Logout"
                         >
                           <LogOut size={16} />
                           <span>Logout</span>
@@ -388,7 +392,7 @@ const Layout: React.FC<LayoutProps> = ({
           <div className="absolute left-0 top-0 bottom-0 w-[80%] max-w-sm bg-white p-6 shadow-2xl animate-slide-in-left">
             <div className="flex justify-between items-center mb-8">
               <span className="text-xl font-bold serif">LuxeNest</span>
-              <button onClick={onMenuToggle}><X size={24} /></button>
+              <button onClick={onMenuToggle} aria-label="Close menu"><X size={24} /></button>
             </div>
             <nav className="flex flex-col space-y-6 text-lg uppercase tracking-wide">
               <Link to="/" onClick={onMenuToggle}>{t('layout.mobileMenu.home')}</Link>
@@ -405,6 +409,7 @@ const Layout: React.FC<LayoutProps> = ({
                       onMenuToggle();
                     }}
                     className="text-left text-red-600"
+                    aria-label="Logout"
                   >
                     Logout
                   </button>
