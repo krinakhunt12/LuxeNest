@@ -120,8 +120,39 @@ app.use(cors({
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    exposedHeaders: ['X-Total-Count', 'X-Page-Count']
 }));
+
+// Explicit CORS headers middleware
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+
+    // Allow all Vercel domains
+    if (origin && origin.includes('vercel.app')) {
+        res.header('Access-Control-Allow-Origin', origin);
+    }
+    // Allow localhost for development
+    else if (origin && (origin.includes('localhost') || origin === 'http://localhost:5173')) {
+        res.header('Access-Control-Allow-Origin', origin);
+    }
+    // Allow specific domains from environment
+    else if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) {
+        res.header('Access-Control-Allow-Origin', process.env.FRONTEND_URL);
+    }
+
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        res.sendStatus(204);
+        return;
+    }
+
+    next();
+});
 
 // Handle preflight requests explicitly
 app.options('*', cors({
