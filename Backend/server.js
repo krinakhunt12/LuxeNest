@@ -83,7 +83,7 @@ app.use(mongoSanitize());
 // CORS configuration
 const allowedOrigins = [
     'http://localhost:5173',
-    'https://luxe-nest-nine.vercel.app',
+    'https://luxe-nest-rho.vercel.app/',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
