@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { adminService } from '../../services/adminService';
 import { logger } from '../../utils/logger';
 import Users from './Users';
@@ -9,25 +9,54 @@ const UsersContainer: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [roleFilter, setRoleFilter] = useState<'ALL' | 'USER' | 'ADMIN'>('ALL');
+    
+    // Use ref to track mounted state
+    const isMountedRef = useRef(true);
 
     useEffect(() => {
+        isMountedRef.current = true;
         fetchUsers();
-    }, []);
+        
+        // Cleanup function
+        return () => {
+            isMountedRef.current = false;
+        };
+    }, []); // Empty dependency array - only run once
 
     const fetchUsers = async () => {
+        if (!isMountedRef.current) return;
+        
         try {
             logger.info('Fetching customer database...');
             setLoading(true);
             const data = await adminService.getUsers();
-            setUsers(data);
-            logger.debug('Customer data synchronized', { count: data.length });
-        } catch (error) {
-            logger.error('Failed to load customers', { error });
-            toast.error('Failed to load customers');
-            setUsers([]);
+            
+            // Only update state if component is still mounted
+            if (isMountedRef.current) {
+                setUsers(data);
+                logger.debug('Customer data synchronized', { count: data.length });
+            }
+        } catch (error: any) {
+            if (isMountedRef.current) {
+                logger.error('Failed to load customers', { error });
+                toast.error('Failed to load customers');
+                setUsers([]);
+            }
         } finally {
-            setLoading(false);
+            if (isMountedRef.current) {
+                setLoading(false);
+            }
         }
+    };
+
+    // Add debounced refresh to prevent multiple rapid calls
+    const [refreshCount, setRefreshCount] = useState(0);
+    const debouncedRefresh = () => {
+        setRefreshCount(prev => prev + 1);
+        setTimeout(() => {
+            setRefreshCount(prev => Math.max(0, prev - 1));
+        }, 1000);
+        fetchUsers();
     };
 
     const filteredUsers = users.filter(u => {
@@ -43,7 +72,7 @@ const UsersContainer: React.FC = () => {
             loading={loading}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
-            onRefresh={fetchUsers}
+            onRefresh={debouncedRefresh}
             roleFilter={roleFilter}
             setRoleFilter={setRoleFilter}
         />

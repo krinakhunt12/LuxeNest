@@ -14,19 +14,21 @@ export const retryRequest = async (
     } catch (error: any) {
       lastError = error;
       
-      // Don't retry on authentication errors
-      if (error.response?.status === 401 || error.response?.status === 403) {
+      // Don't retry on authentication errors or client errors (4xx)
+      if (error.response?.status && error.response.status >= 400 && error.response.status < 500) {
+        console.log('Not retrying client error:', error.response.status);
         throw error;
       }
       
       // Don't retry on last attempt
       if (attempt === maxRetries) {
+        console.log('Max retries reached for:', error.message);
         throw error;
       }
       
       // Wait before retrying
+      console.log(`Retrying request (attempt ${attempt}/${maxRetries}) after ${delay * attempt}ms`);
       await new Promise(resolve => setTimeout(resolve, delay * attempt));
-      console.log(`Retrying request (attempt ${attempt + 1}/${maxRetries})`);
     }
   }
   
