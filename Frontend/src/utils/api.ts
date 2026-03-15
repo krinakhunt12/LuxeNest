@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://luxenest-mshr.onrender.com/api';
+const API_BASE_URL = 'https://luxenest-o11m.onrender.com/api';
 // const API_BASE_URL = 'http://localhost:5000/api';
 
 // Create axios instance

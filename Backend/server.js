@@ -46,7 +46,7 @@ const swaggerOptions = {
             }
         },
         servers: [{
-                url: 'https://luxenest-mshr.onrender.com',
+                url: 'https://luxenest-o11m.onrender.com',
                 description: 'Production server'
             },
             {

@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://luxenest-mshr.onrender.com/api/:path*"
+      "destination": "https://luxenest-o11m.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",
