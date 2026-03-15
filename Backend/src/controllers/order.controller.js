@@ -94,7 +94,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     totalAmount: order.totalAmount
   });
 
-  res.status(201).json({ success: true, data: order });
+  res.status(200).json({ success: true, data: order });
 });
 
 export const getOrders = asyncHandler(async (req, res) => {

@@ -40,7 +40,7 @@ const router = express.Router();
  *               password: { type: string }
  *               phone: { type: string }
  *     responses:
- *       201:
+ *       200:
  *         description: User registered successfully
  */
 router.post('/register', registerValidator, validate, register);
@@ -86,7 +86,7 @@ router.post('/login', loginValidator, validate, login);
  *               password: { type: string }
  *               adminSecret: { type: string }
  *     responses:
- *       201:
+ *       200:
  *         description: Admin registered successfully
  */
 router.post('/admin/register', registerValidator, validate, adminRegister);

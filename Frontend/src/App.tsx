@@ -9,7 +9,6 @@ import { useCartStore } from './store/useCartStore';
 import { useWishlistStore } from './store/useWishlistStore';
 import { logger } from './utils/logger';
 import ErrorBoundary from './components/Common/ErrorBoundary';
-import GlobalLoader from './components/Common/GlobalLoader';
 import './index.css';
 
 
@@ -59,7 +58,6 @@ const AppContent: React.FC = () => {
           onOpenCart={() => setIsCartOpen(true)}
           wishlistCount={wishlistCount}
         >
-          <GlobalLoader />
           {routerContent}
         </LayoutContainer>
 
@@ -78,28 +76,12 @@ const AppContent: React.FC = () => {
   );
 };
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: 1,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    },
-  },
-});
-
 const App: React.FC = () => {
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <AppContent />
-        </AuthProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </ErrorBoundary>
   );
 };

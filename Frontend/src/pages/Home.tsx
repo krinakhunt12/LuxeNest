@@ -1,4 +1,9 @@
 import Hero from "../components/Home/Hero";
+import Features from "../components/Home/Features";
+import Testimonials from "../components/Home/Testimonials";
+import Statistics from "../components/Home/Statistics";
+import BrandShowcase from "../components/Home/BrandShowcase";
+import Newsletter from "../components/Home/Newsletter";
 import { Link } from "react-router-dom";
 import { useHomeData } from "../hooks/useProducts";
 import ProductCard from "../components/Products/ProductCard";
@@ -81,6 +86,21 @@ export const Home: React.FC = () => {
           )}
         </div>
       </section>
+
+      {/* Features Section */}
+      <Features />
+
+      {/* Statistics Section */}
+      <Statistics />
+
+      {/* Testimonials Section */}
+      <Testimonials />
+
+      {/* Brand Showcase */}
+      <BrandShowcase />
+
+      {/* Newsletter Section */}
+      <Newsletter />
     </div>
   );
 };

@@ -8,7 +8,8 @@ import {
   getFeaturedProducts,
   getNewArrivals,
   getBestSellers,
-  uploadExcel
+  uploadExcel,
+  exportProducts
 } from '../controllers/product.controller.js';
 import { protect, restrictTo, optionalAuth } from '../middlewares/auth.middleware.js';
 import { validate } from '../middlewares/validation.middleware.js';
@@ -49,6 +50,7 @@ router.get('/:id', optionalAuth, getProduct);
 // Protected routes (Admin only)
 router.use(protect, restrictTo('ADMIN'));
 
+router.get('/export', exportProducts);
 router.post('/upload-excel', upload.single('file'), uploadExcel);
 router.post('/', upload.array('images', 10), parseFormDataJSON, createProductValidator, validate, createProduct);
 router.put('/:id', upload.array('images', 10), parseFormDataJSON, updateProductValidator, validate, updateProduct);

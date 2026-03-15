@@ -28,6 +28,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
         isBestSeller: false,
         isPremium: false,
         isFeatured: false,
+        currency: 'USD', // Add currency field
     });
     const [images, setImages] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
@@ -61,6 +62,14 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
         { name: 'Copper', hex: '#B87333' },
         { name: 'Champagne', hex: '#F7E7CE' },
         { name: 'Slate', hex: '#708090' },
+    ];
+
+    // Currency options
+    const currencies = [
+        { code: 'USD', symbol: '$', name: 'US Dollar' },
+        { code: 'EUR', symbol: '€', name: 'Euro' },
+        { code: 'GBP', symbol: '£', name: 'British Pound' },
+        { code: 'INR', symbol: '₹', name: 'Indian Rupee' },
     ];
 
     // Function to detect color from name using a color mapping
@@ -133,6 +142,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
                     isBestSeller: product.isBestSeller || false,
                     isPremium: product.isPremium || false,
                     isFeatured: product.isFeatured || false,
+                    currency: product.currency || 'USD', // Include currency
                 });
                 if (product.images) {
                     setPreviews(product.images.map((img: any) => img.url));
@@ -153,6 +163,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
                     isBestSeller: false,
                     isPremium: false,
                     isFeatured: false,
+                    currency: 'USD', // Reset to default currency
                 });
                 setImages([]);
                 setPreviews([]);
@@ -277,7 +288,24 @@ const ProductForm: React.FC<ProductFormProps> = ({ isOpen, onClose, onSuccess, p
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Price ($)</label>
+                                    <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Currency</label>
+                                    <select
+                                        name="currency"
+                                        value={formData.currency}
+                                        onChange={handleInputChange}
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-[#D4AF37]/20 focus:border-[#D4AF37] outline-none transition-all font-medium"
+                                    >
+                                        {currencies.map(currency => (
+                                            <option key={currency.code} value={currency.code}>
+                                                {currency.symbol} {currency.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold uppercase tracking-widest text-gray-400">
+                                        Price ({currencies.find(c => c.code === formData.currency)?.symbol})
+                                    </label>
                                     <input
                                         required
                                         type="number"

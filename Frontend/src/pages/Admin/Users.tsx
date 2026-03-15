@@ -10,7 +10,13 @@ import {
     Shield,
     Filter,
     Download,
-    RefreshCw
+    RefreshCw,
+    Phone,
+    CheckCircle,
+    XCircle,
+    Globe,
+    Bell,
+    Smartphone
 } from 'lucide-react';
 
 
@@ -20,6 +26,8 @@ interface UsersProps {
     searchTerm: string;
     setSearchTerm: (term: string) => void;
     onRefresh: () => void;
+    roleFilter?: 'ALL' | 'USER' | 'ADMIN';
+    setRoleFilter?: (filter: 'ALL' | 'USER' | 'ADMIN') => void;
 }
 
 const Users: React.FC<UsersProps> = ({
@@ -27,9 +35,17 @@ const Users: React.FC<UsersProps> = ({
     loading,
     searchTerm,
     setSearchTerm,
-    onRefresh
+    onRefresh,
+    roleFilter = 'ALL',
+    setRoleFilter
 }) => {
     const { t } = useTranslation();
+
+    // Calculate statistics
+    const totalUsers = users.length;
+    const activeUsers = users.filter(u => u.isActive).length;
+    const adminUsers = users.filter(u => u.role === 'ADMIN').length;
+    const verifiedUsers = users.filter(u => u.emailVerified).length;
 
     if (loading) return (
         <div className="flex flex-col items-center justify-center h-[60vh] space-y-4">
@@ -59,6 +75,54 @@ const Users: React.FC<UsersProps> = ({
                 </div>
             </div>
 
+            {/* Statistics Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-500">Total Users</p>
+                            <p className="text-2xl font-bold text-[#1F2937] mt-1">{totalUsers}</p>
+                        </div>
+                        <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
+                            <UserIcon size={20} className="text-blue-600" />
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-500">Active Users</p>
+                            <p className="text-2xl font-bold text-[#1F2937] mt-1">{activeUsers}</p>
+                        </div>
+                        <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center">
+                            <CheckCircle size={20} className="text-green-600" />
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-500">Admin Users</p>
+                            <p className="text-2xl font-bold text-[#1F2937] mt-1">{adminUsers}</p>
+                        </div>
+                        <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center">
+                            <Shield size={20} className="text-purple-600" />
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm font-medium text-gray-500">Verified Emails</p>
+                            <p className="text-2xl font-bold text-[#1F2937] mt-1">{verifiedUsers}</p>
+                        </div>
+                        <div className="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center">
+                            <Mail size={20} className="text-yellow-600" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center space-x-4 bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex-1 max-w-md transition-all">
                     <div className="flex items-center space-x-3 bg-gray-50 px-4 py-2.5 rounded-xl flex-1 focus-within:bg-white border border-transparent focus-within:border-[#D4AF37]/20 transition-all">
@@ -74,10 +138,15 @@ const Users: React.FC<UsersProps> = ({
                 </div>
 
                 <div className="flex items-center space-x-3">
-                    <button className="flex items-center space-x-2 px-5 py-3.5 bg-gray-50 text-gray-500 rounded-2xl text-xs font-bold uppercase tracking-widest hover:bg-gray-100 transition-colors border border-gray-100">
-                        <Filter size={18} />
-                        <span>Filter Roles</span>
-                    </button>
+                    <select
+                        value={roleFilter}
+                        onChange={(e) => setRoleFilter?.(e.target.value as 'ALL' | 'USER' | 'ADMIN')}
+                        className="flex items-center space-x-2 px-5 py-3.5 bg-gray-50 text-gray-500 rounded-2xl text-xs font-bold uppercase tracking-widest hover:bg-gray-100 transition-colors border border-gray-100 outline-none focus:border-[#D4AF37]/20"
+                    >
+                        <option value="ALL">All Roles</option>
+                        <option value="USER">Users Only</option>
+                        <option value="ADMIN">Admins Only</option>
+                    </select>
                 </div>
             </div>
 
@@ -88,15 +157,16 @@ const Users: React.FC<UsersProps> = ({
                             <tr className="bg-gray-50/50 text-[10px] uppercase tracking-widest font-bold text-gray-400">
                                 <th className="px-8 py-5 border-b border-gray-100">Customer</th>
                                 <th className="px-6 py-5 border-b border-gray-100">Role</th>
+                                <th className="px-6 py-5 border-b border-gray-100">Contact</th>
+                                <th className="px-6 py-5 border-b border-gray-100">Preferences</th>
                                 <th className="px-6 py-5 border-b border-gray-100">Joined Date</th>
-                                <th className="px-6 py-5 border-b border-gray-100">Orders</th>
                                 <th className="px-8 py-5 text-center border-b border-gray-100">Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
                             {users.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="px-8 py-20 text-center text-gray-400">
+                                    <td colSpan={6} className="px-8 py-20 text-center text-gray-400">
                                         <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
                                             <UserIcon size={32} className="opacity-20" />
                                         </div>
@@ -110,12 +180,18 @@ const Users: React.FC<UsersProps> = ({
                                             <div className="flex items-center space-x-4">
                                                 <div className="w-11 h-11 rounded-2xl bg-[#1F2937]/5 flex items-center justify-center text-[#1F2937] font-bold border border-gray-100 relative group-hover:bg-[#1F2937] group-hover:text-white transition-all">
                                                     {user.name?.charAt(0)}
-                                                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                                                    <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
+                                                        user.isActive ? 'bg-green-500' : 'bg-gray-400'
+                                                    }`}></div>
                                                 </div>
                                                 <div>
                                                     <p className="text-sm font-bold text-[#1F2937] leading-tight">{user.name}</p>
                                                     <p className="text-xs text-gray-400 mt-1 flex items-center font-medium">
-                                                        <Mail size={12} className="mr-1.5 opacity-50" /> {user.email}
+                                                        <Mail size={12} className="mr-1.5 opacity-50" /> 
+                                                        <span className="flex items-center">
+                                                            {user.email}
+                                                            {user.emailVerified && <CheckCircle size={10} className="ml-1 text-green-500" />}
+                                                        </span>
                                                     </p>
                                                 </div>
                                             </div>
@@ -130,14 +206,42 @@ const Users: React.FC<UsersProps> = ({
                                             </span>
                                         </td>
                                         <td className="px-6 py-5">
-                                            <p className="text-sm text-gray-500 flex items-center font-medium">
-                                                <Calendar size={14} className="mr-2 opacity-30" />
-                                                {user.joined}
-                                            </p>
+                                            <div className="space-y-1">
+                                                <p className="text-xs text-gray-500 flex items-center font-medium">
+                                                    <Phone size={12} className="mr-1.5 opacity-50" />
+                                                    {user.phone || 'Not provided'}
+                                                </p>
+                                                <p className="text-xs text-gray-400">
+                                                    {user.addresses && user.addresses.length > 0 
+                                                        ? `${user.addresses.length} address(es)` 
+                                                        : 'No addresses'}
+                                                </p>
+                                            </div>
                                         </td>
                                         <td className="px-6 py-5">
-                                            <span className="text-sm font-bold text-[#1F2937]">{user.orders}</span>
-                                            <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-1.5">orders</span>
+                                            <div className="space-y-1">
+                                                <div className="flex items-center text-xs text-gray-500">
+                                                    <Globe size={12} className="mr-1.5 opacity-50" />
+                                                    {user.preferences?.currency || 'USD'}
+                                                </div>
+                                                <div className="flex items-center text-xs text-gray-500">
+                                                    <Bell size={12} className="mr-1.5 opacity-50" />
+                                                    {user.preferences?.emailNotifications ? 'Email' : ''}
+                                                    {user.preferences?.smsNotifications ? ' SMS' : ''}
+                                                    {!user.preferences?.emailNotifications && !user.preferences?.smsNotifications ? 'None' : ''}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-5">
+                                            <p className="text-sm text-gray-500 flex items-center font-medium">
+                                                <Calendar size={14} className="mr-2 opacity-30" />
+                                                {new Date(user.createdAt).toLocaleDateString()}
+                                            </p>
+                                            {user.lastLogin && (
+                                                <p className="text-xs text-gray-400 mt-1">
+                                                    Last: {new Date(user.lastLogin).toLocaleDateString()}
+                                                </p>
+                                            )}
                                         </td>
                                         <td className="px-8 py-5 text-center">
                                             <Menu as="div" className="relative inline-block text-left">
@@ -168,11 +272,25 @@ const Users: React.FC<UsersProps> = ({
                                                                 </button>
                                                             )}
                                                         </Menu.Item>
+                                                        <Menu.Item>
+                                                            {({ active }) => (
+                                                                <button className={`${active ? 'bg-gray-50 text-[#D4AF37]' : 'text-gray-700'} group flex w-full items-center px-4 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors`}>
+                                                                    View Orders
+                                                                </button>
+                                                            )}
+                                                        </Menu.Item>
+                                                        <Menu.Item>
+                                                            {({ active }) => (
+                                                                <button className={`${active ? 'bg-gray-50 text-[#D4AF37]' : 'text-gray-700'} group flex w-full items-center px-4 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors`}>
+                                                                    Send Email
+                                                                </button>
+                                                            )}
+                                                        </Menu.Item>
                                                         <hr className="my-1 border-gray-50" />
                                                         <Menu.Item>
                                                             {({ active }) => (
                                                                 <button className={`${active ? 'bg-red-50 text-red-600' : 'text-red-500'} group flex w-full items-center px-4 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors`}>
-                                                                    Deactivate User
+                                                                    {user.isActive ? 'Deactivate User' : 'Activate User'}
                                                                 </button>
                                                             )}
                                                         </Menu.Item>

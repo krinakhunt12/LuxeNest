@@ -63,8 +63,8 @@ const ProductsContainer: React.FC = () => {
     };
 
     const handleDownloadTemplate = () => {
-        const headers = ['Name', 'Price', 'Description', 'Category', 'Stock', 'Image', 'SKU'];
-        const sampleRow = ['Modern Sofa', '999.99', 'A comfortable modern sofa', 'Living Room', '10', 'https://example.com/image.jpg', 'SOFA-001'];
+        const headers = ['Product Name', 'Description', 'Price (INR)', 'Stock', 'Category', 'Color', 'Images'];
+        const sampleRow = ['Modern Sofa', 'A comfortable modern sofa with premium fabric', '8500', '10', 'Living Room', 'Gray', 'https://example.com/image.jpg'];
         const csvContent = "data:text/csv;charset=utf-8," + [headers, sampleRow].map(e => e.join(",")).join("\n");
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
@@ -73,6 +73,19 @@ const ProductsContainer: React.FC = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    };
+
+    const handleExportProducts = async (format: 'xlsx' | 'csv') => {
+        try {
+            await adminService.exportProducts({ 
+                search: debouncedSearch, 
+                format 
+            });
+            toast.success(`Products exported as ${format.toUpperCase()} successfully`);
+        } catch (error) {
+            console.error('Failed to export products', error);
+            toast.error('Failed to export products');
+        }
     };
 
     return (
@@ -94,6 +107,7 @@ const ProductsContainer: React.FC = () => {
                 onRefresh={refetch}
                 onUploadExcel={handleUploadExcel}
                 onDownloadTemplate={handleDownloadTemplate}
+                onExportProducts={handleExportProducts}
             />
 
 

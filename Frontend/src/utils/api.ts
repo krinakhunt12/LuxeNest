@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { useLoadingStore } from '../store/useLoadingStore';
 
 const API_BASE_URL = 'https://luxenest-mshr.onrender.com/api';
+// const API_BASE_URL = 'http://localhost:5000/api';
 
 // Create axios instance
 const api = axios.create({
@@ -18,11 +18,6 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
     (config) => {
-        // Only show loading for user-initiated requests, not background refetches
-        if (!(config as any).hideLoader && !(config as any).isBackground) {
-            useLoadingStore.getState().startLoading();
-        }
-
         const token = localStorage.getItem('authToken');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
@@ -30,7 +25,6 @@ api.interceptors.request.use(
         return config;
     },
     (error) => {
-        useLoadingStore.getState().stopLoading();
         return Promise.reject(error);
     }
 );
@@ -38,17 +32,9 @@ api.interceptors.request.use(
 // Response interceptor for error handling
 api.interceptors.response.use(
     (response) => {
-        // Only stop loading for user-initiated requests
-        if (!(response.config as any).hideLoader && !(response.config as any).isBackground) {
-            useLoadingStore.getState().stopLoading();
-        }
         return response;
     },
     (error) => {
-        // Only stop loading for user-initiated requests
-        if (!(error.config as any).hideLoader && !(error.config as any).isBackground) {
-            useLoadingStore.getState().stopLoading();
-        }
 
         if (error.response) {
             // Handle specific error codes

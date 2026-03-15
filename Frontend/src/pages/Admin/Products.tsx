@@ -12,6 +12,7 @@ import {
     RefreshCw,
     Upload,
     FileSpreadsheet,
+    Download,
     ChevronLeft,
     ChevronRight,
     Check
@@ -36,6 +37,7 @@ interface ProductsProps {
     onRefresh: () => void;
     onUploadExcel: (file: File) => void;
     onDownloadTemplate: () => void;
+    onExportProducts: (format: 'xlsx' | 'csv') => void;
     onDeleteBulk: (ids: string[]) => void;
 }
 
@@ -52,12 +54,26 @@ const Products: React.FC<ProductsProps> = ({
     onRefresh,
     onUploadExcel,
     onDownloadTemplate,
+    onExportProducts,
     onDeleteBulk
 }) => {
 
     const { t } = useTranslation();
     const fileInputRef = React.useRef<HTMLInputElement>(null);
     const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
+    const [showExportMenu, setShowExportMenu] = React.useState(false);
+
+    // Close export menu when clicking outside
+    React.useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (showExportMenu && !(event.target as Element).closest('.export-menu-container')) {
+                setShowExportMenu(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [showExportMenu]);
 
     const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.checked) {
@@ -131,6 +147,32 @@ const Products: React.FC<ProductsProps> = ({
                         <FileSpreadsheet size={18} />
                         <span>Template</span>
                     </button>
+                    <div className="relative export-menu-container">
+                        <button
+                            onClick={() => setShowExportMenu(!showExportMenu)}
+                            className="flex items-center space-x-2 px-6 py-3 bg-white border border-gray-100 text-green-600 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-green-50 transition-all shadow-sm cursor-pointer"
+                        >
+                            <Download size={18} />
+                            <span>Export</span>
+                        </button>
+                        
+                        {showExportMenu && (
+                            <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 z-50">
+                                <button
+                                    onClick={() => { onExportProducts('xlsx'); setShowExportMenu(false); }}
+                                    className="w-full text-left px-4 py-3 text-sm hover:bg-gray-50 transition-colors rounded-t-xl"
+                                >
+                                    Export as Excel (.xlsx)
+                                </button>
+                                <button
+                                    onClick={() => { onExportProducts('csv'); setShowExportMenu(false); }}
+                                    className="w-full text-left px-4 py-3 text-sm hover:bg-gray-50 transition-colors rounded-b-xl"
+                                >
+                                    Export as CSV (.csv)
+                                </button>
+                            </div>
+                        )}
+                    </div>
                     <button
                         onClick={() => fileInputRef.current?.click()}
                         className="flex items-center space-x-2 px-6 py-3 bg-white border border-gray-100 text-green-600 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-green-50 transition-all shadow-sm cursor-pointer"

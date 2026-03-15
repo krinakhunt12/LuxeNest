@@ -39,7 +39,7 @@ router.use(protect, restrictTo('ADMIN'));
  *     security:
  *       - bearerAuth: []
  *     responses:
- *       201:
+ *       200:
  *         description: Category created
  */
 router.post('/', upload.single('image'), parseFormDataJSON, createCategory);

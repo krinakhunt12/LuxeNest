@@ -100,5 +100,31 @@ export const adminService = {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         return response.data;
+    },
+
+    async exportProducts(params?: { category?: string; search?: string; format?: 'xlsx' | 'csv' }): Promise<any> {
+        const response = await api.get<ApiResponse<any>>('/products/export', { 
+            params,
+            responseType: 'blob'
+        });
+        
+        // Create download link
+        const blob = new Blob([response.data], { 
+            type: params?.format === 'csv' 
+                ? 'text/csv' 
+                : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+        });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        
+        const filename = `products_export_${new Date().toISOString().split('T')[0]}.${params?.format || 'xlsx'}`;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        
+        return response.data;
     }
 };

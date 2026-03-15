@@ -156,15 +156,9 @@ const Layout: React.FC<LayoutProps> = ({
             <Twitter size={14} className="cursor-pointer hover:text-[#D4AF37]" />
           </div>
           {!isAuthenticated ? (
-            <div className="flex space-x-3">
-              <Link to="/login" className="cursor-pointer hover:underline">
-                {t('layout.topBar.logIn')}
-              </Link>
-              <span className="text-gray-500">|</span>
-              <Link to="/signup" className="cursor-pointer hover:underline">
-                {t('layout.topBar.joinNow')}
-              </Link>
-            </div>
+            <Link to="/login" className="cursor-pointer hover:underline text-xs">
+              {t('layout.topBar.logIn')}
+            </Link>
           ) : (
             <div className="flex items-center space-x-2">
               <User size={14} />
@@ -377,9 +371,6 @@ const Layout: React.FC<LayoutProps> = ({
                 <Link to="/login" className="text-sm font-medium hover:text-[#D4AF37] transition-colors">
                   Login
                 </Link>
-                <Link to="/signup" className="text-sm font-medium bg-[#D4AF37] text-white px-4 py-2 rounded-lg hover:bg-[#1F2937] transition-colors">
-                  Sign Up
-                </Link>
               </div>
             )}
           </div>
@@ -417,7 +408,6 @@ const Layout: React.FC<LayoutProps> = ({
               ) : (
                 <>
                   <Link to="/login" onClick={onMenuToggle}>Login</Link>
-                  <Link to="/signup" onClick={onMenuToggle}>Sign Up</Link>
                 </>
               )}
             </nav>
@@ -476,11 +466,6 @@ const Layout: React.FC<LayoutProps> = ({
                 <li>
                   <Link to="/login" className="hover:text-white transition-colors">
                     {t('layout.footer.login')}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/signup" className="hover:text-white transition-colors">
-                    {t('layout.footer.signUp')}
                   </Link>
                 </li>
                 <li>

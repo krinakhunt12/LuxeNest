@@ -74,7 +74,7 @@ router.put('/profile', updateProfile);
  *               zipCode: { type: string }
  *               country: { type: string }
  *     responses:
- *       201:
+ *       200:
  *         description: Address added
  */
 router.post('/addresses', addAddress);

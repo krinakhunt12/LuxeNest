@@ -1,29 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { adminService } from '../../services/adminService';
-import { logger } from '../../utils/logger';
 import Dashboard from './Dashboard';
+import { useAdminStats } from '../../hooks/useAdmin';
 import toast from 'react-hot-toast';
 
 const DashboardContainer: React.FC = () => {
-    const [stats, setStats] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                logger.info('Fetching dashboard statistics...');
-                const data = await adminService.getDashboardStats();
-                setStats(data);
-                logger.debug('Dashboard statistics fetched successfully', { data });
-            } catch (error) {
-                logger.warn('Failed to fetch dashboard stats', { error });
-                setStats(null);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchStats();
-    }, []);
+    const { data: stats, isLoading: loading } = useAdminStats();
 
     const handleExportReport = () => {
         try {

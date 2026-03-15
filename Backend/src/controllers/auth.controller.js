@@ -37,7 +37,12 @@ export const register = asyncHandler(async (req, res) => {
   });
 
   // Send verification email
-  await sendVerificationEmail(email, verificationToken);
+  try {
+    await sendVerificationEmail(email, verificationToken);
+  } catch (error) {
+    logger.error(`Verification email failed to send to ${email}. Error: ${error.message}`);
+    // Don't crash registration just because email failed
+  }
 
   // Generate tokens
   const token = generateToken(user._id, user.role);
@@ -47,7 +52,7 @@ export const register = asyncHandler(async (req, res) => {
   user.refreshToken = refreshToken;
   await user.save();
 
-  res.status(201).json({
+  res.status(200).json({
     success: true,
     message: 'Registration successful. Please verify your email.',
     data: {
@@ -57,6 +62,7 @@ export const register = asyncHandler(async (req, res) => {
     }
   });
 });
+
 
 /**
  * @desc    Login user
@@ -244,7 +250,7 @@ export const adminRegister = asyncHandler(async (req, res) => {
 
   const token = generateToken(user._id, user.role);
 
-  res.status(201).json({
+  res.status(200).json({
     success: true,
     message: 'Admin account created successfully',
     data: { user, token }

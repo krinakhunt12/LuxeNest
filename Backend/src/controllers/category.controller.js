@@ -64,7 +64,7 @@ export const createCategory = asyncHandler(async (req, res) => {
   }
 
   const category = await Category.create(categoryData);
-  res.status(201).json({ success: true, data: category });
+  res.status(200).json({ success: true, data: category });
 });
 
 export const updateCategory = asyncHandler(async (req, res) => {

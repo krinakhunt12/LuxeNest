@@ -5,6 +5,7 @@ import { Heart, Star, ArrowRight } from "lucide-react";
 import { useCartStore } from "../store/useCartStore";
 import { useWishlistStore } from "../store/useWishlistStore";
 import toast from "react-hot-toast";
+import Skeleton from "../components/Common/Skeleton";
 
 export const ProductDetail: React.FC = () => {
   const { id } = useParams();
@@ -22,9 +23,33 @@ export const ProductDetail: React.FC = () => {
   }, [product]);
 
   if (isLoading) return (
-    <div className="py-40 text-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37] mx-auto mb-4"></div>
-      <p className="text-gray-400 font-medium">Loading product details...</p>
+    <div className="py-24 bg-white">
+      <div className="container mx-auto px-4 md:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <div>
+            <Skeleton variant="rectangular" height={500} className="w-full rounded-lg" />
+            <div className="grid grid-cols-4 gap-4 mt-4">
+              {[1, 2, 3, 4].map(i => <Skeleton key={i} variant="rectangular" height={100} className="rounded-md" />)}
+            </div>
+          </div>
+          <div className="space-y-6">
+            <Skeleton variant="text" width={100} height={16} />
+            <Skeleton variant="text" width="60%" height={48} />
+            <Skeleton variant="text" width={150} height={24} />
+            <Skeleton variant="text" width="100%" height={100} />
+            <div className="space-y-4 pt-4">
+              <Skeleton variant="text" width={120} />
+              <div className="flex space-x-2">
+                {[1, 2, 3].map(i => <Skeleton key={i} variant="circular" width={32} height={32} />)}
+              </div>
+            </div>
+            <div className="flex gap-4 pt-8">
+              <Skeleton variant="rectangular" width={120} height={48} />
+              <Skeleton variant="rectangular" className="flex-1" height={48} />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 

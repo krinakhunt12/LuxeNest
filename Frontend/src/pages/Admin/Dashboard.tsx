@@ -8,6 +8,7 @@ import {
     ArrowUpRight,
     ArrowDownRight,
 } from 'lucide-react';
+import Skeleton, { TableSkeleton } from '../../components/Common/Skeleton';
 
 interface DashboardProps {
     stats: any;
@@ -60,9 +61,51 @@ const Dashboard: React.FC<DashboardProps> = ({
     ];
 
     if (loading) return (
-        <div className="flex flex-col items-center justify-center h-[60vh] space-y-4">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37]"></div>
-            <p className="text-gray-400 font-medium animate-pulse">Synchronizing Dashboard...</p>
+        <div className="space-y-8 animate-pulse">
+            <div className="flex items-center justify-between">
+                <div>
+                    <Skeleton variant="text" width={200} height={32} />
+                    <Skeleton variant="text" width={300} height={16} className="mt-1" />
+                </div>
+                <div className="flex space-x-3">
+                    <Skeleton variant="rectangular" width={120} height={48} className="rounded-xl" />
+                    <Skeleton variant="rectangular" width={150} height={48} className="rounded-xl" />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[1, 2, 3, 4].map(i => (
+                    <div key={i} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                        <div className="flex justify-between items-start mb-4">
+                            <Skeleton variant="circular" width={48} height={48} />
+                            <Skeleton variant="text" width={40} />
+                        </div>
+                        <Skeleton variant="text" width={80} className="mb-2" />
+                        <Skeleton variant="text" width={120} height={32} />
+                    </div>
+                ))}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2">
+                    <TableSkeleton rows={6} />
+                </div>
+                <div className="bg-gray-800 rounded-3xl p-8">
+                    <Skeleton variant="text" width={150} height={24} className="mb-4" />
+                    <Skeleton variant="text" width={250} height={16} className="mb-10" />
+                    <div className="space-y-8">
+                        {[1, 2, 3].map(i => (
+                            <div key={i}>
+                                <div className="flex justify-between mb-3">
+                                    <Skeleton variant="text" width={100} />
+                                    <Skeleton variant="text" width={30} />
+                                </div>
+                                <Skeleton variant="rectangular" height={6} className="rounded-full" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 

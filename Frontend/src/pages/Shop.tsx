@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { useProducts, useCategories } from "../hooks/useProducts";
 
 import ProductCard from "../components/Products/ProductCard";
+import Skeleton, { ProductCardSkeleton } from "../components/Common/Skeleton";
 
 export const Shop: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -40,9 +41,22 @@ export const Shop: React.FC = () => {
   };
 
   if (isLoading) return (
-    <div className="py-40 text-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37] mx-auto mb-4"></div>
-      <p className="text-gray-400 font-medium">Loading collection...</p>
+    <div className="py-24 bg-white">
+      <div className="container mx-auto px-4 md:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+          <div className="hidden lg:block space-y-10">
+            <Skeleton variant="text" height={200} />
+            <Skeleton variant="text" height={150} />
+          </div>
+          <div className="lg:col-span-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-16">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 

@@ -5,49 +5,26 @@ import { ProfileSettings } from "./ProfileSettings";
 import { Preferences } from "./Preferences";
 import { userService } from "../services/userService";
 import { useAuth } from "../contexts/AuthContext";
+import { useUserOrders, useCancelOrder } from "../hooks/useUser";
+import { TableSkeleton } from "../components/Common/Skeleton";
 import toast from "react-hot-toast";
 
 type AccountSection = 'orders' | 'profile' | 'wishlist' | 'preferences';
 
 export const Account: React.FC = () => {
   const [activeSection, setActiveSection] = useState<AccountSection>('orders');
-  const [orders, setOrders] = useState<any[]>([]);
-  const [loadingOrders, setLoadingOrders] = useState(false);
-  const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const { data: orders = [], isLoading: loadingOrders, refetch: fetchOrders } = useUserOrders();
+  const cancelOrderMutation = useCancelOrder();
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (activeSection === 'orders') {
-      fetchOrders();
-    }
-  }, [activeSection]);
-
-  const fetchOrders = async () => {
-    try {
-      setLoadingOrders(true);
-      const data = await userService.getUserOrders();
-      setOrders(data);
-    } catch (error) {
-      console.error('Failed to load orders', error);
-    } finally {
-      setLoadingOrders(false);
-    }
-  };
-
   const handleCancelOrder = async (orderId: string) => {
     if (!window.confirm('Are you sure you want to cancel this order?')) return;
-
     try {
-      setCancellingId(orderId);
-      await userService.cancelOrder(orderId);
-      toast.success('Order cancelled successfully');
-      fetchOrders(); // Refresh the list
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to cancel order');
-    } finally {
-      setCancellingId(null);
+      await cancelOrderMutation.mutateAsync(orderId);
+    } catch (error) {
+      // toast handled in hook
     }
   };
 
@@ -78,7 +55,7 @@ export const Account: React.FC = () => {
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold serif">Recent Orders</h3>
               <button
-                onClick={fetchOrders}
+                onClick={() => fetchOrders()}
                 disabled={loadingOrders}
                 className="flex items-center space-x-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg text-sm font-bold transition-all disabled:opacity-50"
                 title="Refresh orders"
@@ -88,9 +65,7 @@ export const Account: React.FC = () => {
               </button>
             </div>
             {loadingOrders ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37]"></div>
-              </div>
+              <TableSkeleton rows={5} />
             ) : orders.length === 0 ? (
               <div className="text-center py-12 text-gray-500">
                 <Package size={48} className="mx-auto mb-4 opacity-20" />
@@ -137,11 +112,11 @@ export const Account: React.FC = () => {
                             {canCancel(order.orderStatus) && (
                               <button
                                 onClick={() => handleCancelOrder(order._id || order.id)}
-                                disabled={cancellingId === (order._id || order.id)}
+                                disabled={cancelOrderMutation.isPending}
                                 className="p-2 hover:bg-red-50 rounded-lg text-red-500 transition-colors cursor-pointer disabled:opacity-30"
                                 title="Cancel Order"
                               >
-                                {cancellingId === (order._id || order.id) ? (
+                                {cancelOrderMutation.isPending && cancelOrderMutation.variables === (order._id || order.id) ? (
                                   <RefreshCw size={18} className="animate-spin" />
                                 ) : (
                                   <XCircle size={18} />
@@ -195,10 +170,10 @@ export const Account: React.FC = () => {
                               await handleCancelOrder(selectedOrder._id || selectedOrder.id);
                               setSelectedOrder(null);
                             }}
-                            disabled={cancellingId === (selectedOrder._id || selectedOrder.id)}
+                            disabled={cancelOrderMutation.isPending}
                             className="mt-2 text-red-500 font-bold text-[10px] uppercase tracking-wider hover:underline cursor-pointer disabled:opacity-50"
                           >
-                            {cancellingId === (selectedOrder._id || selectedOrder.id) ? 'Cancelling...' : 'Cancel Order'}
+                            {cancelOrderMutation.isPending && cancelOrderMutation.variables === (selectedOrder._id || selectedOrder.id) ? 'Cancelling...' : 'Cancel Order'}
                           </button>
                         )}
                       </div>

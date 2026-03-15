@@ -8,6 +8,7 @@ const UsersContainer: React.FC = () => {
     const [users, setUsers] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [roleFilter, setRoleFilter] = useState<'ALL' | 'USER' | 'ADMIN'>('ALL');
 
     useEffect(() => {
         fetchUsers();
@@ -29,10 +30,12 @@ const UsersContainer: React.FC = () => {
         }
     };
 
-    const filteredUsers = users.filter(u =>
-        u.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        u.email?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredUsers = users.filter(u => {
+        const matchesSearch = u.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           u.email?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesRole = roleFilter === 'ALL' || u.role === roleFilter;
+        return matchesSearch && matchesRole;
+    });
 
     return (
         <Users
@@ -41,6 +44,8 @@ const UsersContainer: React.FC = () => {
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             onRefresh={fetchUsers}
+            roleFilter={roleFilter}
+            setRoleFilter={setRoleFilter}
         />
     );
 };

@@ -92,7 +92,7 @@ export const createProduct = asyncHandler(async (req, res) => {
     // Ignore cache clear errors
   }
 
-  res.status(201).json({
+  res.status(200).json({
     success: true,
     data: product
   });
@@ -201,20 +201,36 @@ export const uploadExcel = asyncHandler(async (req, res) => {
     const row = data[i];
 
     try {
-      // Validate required fields
-      const name = row.name || row.Name;
-      const price = parseFloat(row.price || row.Price || 0);
+      // Validate required fields - handle multiple column name formats
+      const name = row.name || row.Name || row['Product Name'];
+      const price = parseFloat(row.price || row.Price || row['Price (INR)'] || 0);
 
       if (!name || !price) {
-        errors.push(`Row ${i + 2}: Missing required fields (name or price)`);
+        errors.push(`Row ${i + 2}: Missing required fields (name or price). Found name: "${name}", price: "${price}"`);
         continue;
       }
 
       // Look up category by name (case-insensitive)
       let categoryId = null;
-      const categoryName = row.category || row.Category;
+      let categoryName = row.category || row.Category;
+
+      // Handle common category name variations
+      const categoryMappings = {
+        'dining': 'Dining Room',
+        'living room': 'Living Room',
+        'bedroom': 'Bedroom',
+        'office': 'Office',
+        'outdoor': 'Outdoor',
+        'kitchen': 'Kitchen'
+      };
 
       if (categoryName) {
+        // Check if it's a short form that needs mapping
+        const normalizedName = categoryName.toLowerCase().trim();
+        if (categoryMappings[normalizedName]) {
+          categoryName = categoryMappings[normalizedName];
+        }
+
         const category = await Category.findOne({
           name: { $regex: new RegExp(`^${categoryName}$`, 'i') }
         });
@@ -222,7 +238,7 @@ export const uploadExcel = asyncHandler(async (req, res) => {
         if (category) {
           categoryId = category._id;
         } else {
-          errors.push(`Row ${i + 2}: Category "${categoryName}" not found`);
+          errors.push(`Row ${i + 2}: Category "${categoryName}" not found. Available categories: Bedroom, Dining Room, Kitchen, Living Room, Office, Outdoor`);
           continue;
         }
       } else {
@@ -242,14 +258,19 @@ export const uploadExcel = asyncHandler(async (req, res) => {
         sku: row.sku || row.SKU || `LXN-${Date.now()}-${Math.floor(Math.random() * 10000)}`
       };
 
-      // Handle image URL from Excel
-      const imageUrl = row.image || row.Image;
+      // Handle image URL from Excel - support multiple column names
+      const imageUrl = row.image || row.Image || row.Images;
       if (imageUrl && typeof imageUrl === 'string' && imageUrl.trim()) {
         product.images = [{
           url: imageUrl.trim(),
           alt: name,
           isPrimary: true
         }];
+      }
+
+      // Handle color if present
+      if (row.color || row.Color) {
+        product.color = row.color || row.Color;
       }
 
       productsToInsert.push(product);
@@ -273,7 +294,7 @@ export const uploadExcel = asyncHandler(async (req, res) => {
     // Clear cache
     await deleteCache('products:*');
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: `${result.length} products uploaded successfully${errors.length > 0 ? ` (${errors.length} rows skipped)` : ''}`,
       data: result,
@@ -286,6 +307,85 @@ export const uploadExcel = asyncHandler(async (req, res) => {
       return res.status(400).json({ success: false, message: 'Duplicate key error (e.g. SKU or ID already exists). Check your data.', error: error.message });
     }
     throw error;
+  }
+});
+
+export const exportProducts = asyncHandler(async (req, res) => {
+  try {
+    const { category, search, format = 'xlsx' } = req.query;
+    
+    // Build query based on filters
+    const query = { isActive: true };
+    
+    if (category) {
+      query.category = category;
+    }
+    
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    // Fetch products with category populated
+    const products = await Product.find(query)
+      .populate('category')
+      .sort({ createdAt: -1 });
+
+    if (!products || products.length === 0) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'No products found to export' 
+      });
+    }
+
+    // Transform data for export
+    const exportData = products.map(product => ({
+      ID: product.id || product._id,
+      Name: product.name,
+      Description: product.description || '',
+      Price: product.price,
+      Category: typeof product.category === 'object' ? product.category.name : product.category,
+      Stock: product.stock,
+      SKU: product.sku || '',
+      Status: product.stock > 0 ? 'In Stock' : 'Out of Stock',
+      'Created Date': new Date(product.createdAt).toLocaleDateString(),
+      'Is Featured': product.isFeatured ? 'Yes' : 'No',
+      'Is New': product.isNew ? 'Yes' : 'No',
+      'Is Sale': product.isSale ? 'Yes' : 'No',
+      Images: product.images && product.images.length > 0 
+        ? product.images.map(img => img.url).join('; ') 
+        : ''
+    }));
+
+    // Create workbook and worksheet
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Products');
+
+    // Generate buffer
+    const excelBuffer = XLSX.write(wb, { 
+      type: 'buffer', 
+      bookType: format === 'csv' ? 'csv' : 'xlsx' 
+    });
+
+    // Set headers for download
+    const filename = `products_export_${new Date().toISOString().split('T')[0]}.${format}`;
+    const contentType = format === 'csv' 
+      ? 'text/csv' 
+      : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(excelBuffer);
+
+  } catch (error) {
+    console.error('Export error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to export products' 
+    });
   }
 });
 

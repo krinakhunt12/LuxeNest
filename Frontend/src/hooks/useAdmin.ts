@@ -199,3 +199,9 @@ export const useAdminCategories = (params: { page?: number; limit?: number } = {
 };
 
 
+export const useAdminStats = () => {
+    return useQuery({
+        queryKey: ['admin', 'stats'],
+        queryFn: () => adminService.getDashboardStats(),
+    });
+};

@@ -8,9 +8,9 @@ export const About: React.FC = () => {
       {/* Cinematic Hero */}
       <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center">
         <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90" 
-            alt="Interior Gallery" 
+          <img
+            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=90"
+            alt="Interior Gallery"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40"></div>
@@ -18,7 +18,7 @@ export const About: React.FC = () => {
         <div className="relative z-10 text-center text-white px-4">
           <h1 className="text-5xl md:text-8xl font-bold serif mb-6 tracking-tight animate-fade-in-up">The Art of Living Well</h1>
           <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-8"></div>
-          <p className="text-xl md:text-2xl font-light max-w-2xl mx-auto leading-relaxed">Defining modern elegance through timeless craftsmanship since 2010.</p>
+          <p className="text-xl md:text-2xl font-light max-w-2xl mx-auto leading-relaxed">Defining modern elegance through timeless craftsmanship since 2000.</p>
         </div>
       </section>
 
@@ -28,16 +28,16 @@ export const About: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <div className="relative">
               <div className="aspect-[4/5] bg-gray-100 overflow-hidden rounded-sm">
-                <img 
-                  src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
-                  alt="Design Detail" 
+                <img
+                  src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                  alt="Design Detail"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="absolute -bottom-10 -right-10 hidden md:block w-72 aspect-square bg-white p-4 shadow-2xl rounded-sm">
-                <img 
-                  src="https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
-                  alt="Process" 
+                <img
+                  src="https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                  alt="Process"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -47,7 +47,7 @@ export const About: React.FC = () => {
               <h2 className="text-4xl md:text-6xl font-bold serif leading-tight">Beyond Simple Furnishings.</h2>
               <div className="w-16 h-1 bg-[#1F2937]"></div>
               <p className="text-gray-600 text-lg leading-relaxed">
-                LuxeNest was founded in a small London atelier with a singular vision: to bridge the gap between high-end architectural design and the comfort of a private sanctuary. 
+                LuxeNest was founded in a small London atelier with a singular vision: to bridge the gap between high-end architectural design and the comfort of a private sanctuary.
               </p>
               <p className="text-gray-600 text-lg leading-relaxed">
                 We believe that furniture is more than utility; it is a silent narrator of your story. Every piece in our collection is curated to evoke emotion, inspire creativity, and stand as a testament to durability.
@@ -77,9 +77,9 @@ export const About: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="group space-y-6">
               <div className="h-80 overflow-hidden bg-white/5 rounded-sm">
-                <img 
-                  src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                  alt="Wood" 
+                <img
+                  src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Wood"
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                 />
               </div>
@@ -88,9 +88,9 @@ export const About: React.FC = () => {
             </div>
             <div className="group space-y-6 mt-8 md:mt-16">
               <div className="h-80 overflow-hidden bg-white/5 rounded-sm">
-                <img 
-                  src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                  alt="Textiles" 
+                <img
+                  src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Textiles"
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                 />
               </div>
@@ -99,9 +99,9 @@ export const About: React.FC = () => {
             </div>
             <div className="group space-y-6">
               <div className="h-80 overflow-hidden bg-white/5 rounded-sm">
-                <img 
-                  src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                  alt="Finishing" 
+                <img
+                  src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Finishing"
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                 />
               </div>
@@ -142,7 +142,7 @@ export const About: React.FC = () => {
       </section>
 
       {/* Founder's Note */}
-      <section className="py-24 md:py-32 bg-[#F9FAFB] border-y">
+      <section className="py-24 md:py-32 bg-[#F9FAFB]">
         <div className="container mx-auto px-4 md:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <Quote className="mx-auto mb-8 text-gray-200" size={60} />
@@ -163,8 +163,8 @@ export const About: React.FC = () => {
       {/* Final CTA */}
       <section className="py-24 text-center">
         <h2 className="text-4xl font-bold serif mb-8">Ready to transform your home?</h2>
-        <Link 
-          to="/shop" 
+        <Link
+          to="/shop"
           className="bg-[#1F2937] text-white px-12 py-5 text-sm font-bold uppercase tracking-widest hover:bg-[#D4AF37] transition-all rounded-sm inline-block"
         >
           Shop All Collections

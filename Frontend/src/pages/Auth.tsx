@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Facebook, Chrome, AlertCircle } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -167,32 +167,27 @@ export const Auth: React.FC<{ initialMode: 'login' | 'signup' }> = ({ initialMod
           </div>
         </form>
 
-        <div className="mt-6">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-300"></div></div>
-            <div className="relative flex justify-center text-sm"><span className="px-2 bg-white text-gray-500">Or continue with</span></div>
-          </div>
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-              <Facebook className="text-blue-600" size={20} />
-            </button>
-            <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-              <Chrome className="text-red-500" size={20} />
-            </button>
-          </div>
-        </div>
-
         <div className="text-center mt-8">
           <button
             onClick={() => {
               setMode(mode === 'login' ? 'signup' : 'login');
             }}
-            className="text-sm font-medium text-[#D4AF37] hover:text-[#1F2937]"
+            className="text-sm font-medium"
           >
-            {mode === 'login' ? "Don't have an account? Sign up" : "Already have an account? Log in"}
+            {mode === 'login' ? (
+              <>
+                <span className="text-gray-500">Don't have an account? </span>
+                <span className="text-[#D4AF37] hover:text-[#1F2937]">Sign up</span>
+              </>
+            ) : (
+              <>
+                <span className="text-gray-500">Already have an account? </span>
+                <span className="text-[#D4AF37] hover:text-[#1F2937]">Log in</span>
+              </>
+            )}
           </button>
         </div>
       </div>
     </div>
   );
-};
+};

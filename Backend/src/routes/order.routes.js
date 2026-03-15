@@ -37,7 +37,7 @@ router.use(protect);
  *               shippingAddress: { type: object }
  *               paymentMethod: { type: string }
  *     responses:
- *       201:
+ *       200:
  *         description: Order created
  */
 router.post('/', createOrderValidator, validate, createOrder);
