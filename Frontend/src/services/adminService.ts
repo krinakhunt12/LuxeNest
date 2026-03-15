@@ -103,7 +103,7 @@ export const adminService = {
     },
 
     async exportProducts(params?: { category?: string; search?: string; format?: 'xlsx' | 'csv' }): Promise<any> {
-        const response = await api.get<ApiResponse<any>>('/products/export', { 
+        const response = await api.get('/products/export', { 
             params,
             responseType: 'blob'
         });
