@@ -12,6 +12,8 @@ const api = axios.create({
     },
     withCredentials: true,
     decompress: true, // Enable gzip decompression
+    // Increase timeout for production
+    timeout: 30000, // 30 seconds for production
 });
 
 // Request interceptor to add auth token

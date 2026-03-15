@@ -1,14 +1,15 @@
 import api from '../utils/api';
 import { ApiResponse } from '../types';
+import { apiWithRetry } from '../utils/retryApi';
 
 export const adminService = {
     async getDashboardStats(): Promise<any> {
-        const response = await api.get<ApiResponse<any>>('/admin/dashboard');
+        const response = await apiWithRetry.get('/admin/dashboard');
         return response.data.data;
     },
 
     async getOrders(params?: { page?: number; limit?: number; search?: string }): Promise<{ data: any[]; pagination: any }> {
-        const response = await api.get<ApiResponse<any[]>>('/admin/orders', { params });
+        const response = await apiWithRetry.get('/admin/orders', { params });
         return {
             data: response.data.data || [],
             pagination: (response.data as any).pagination
@@ -16,17 +17,17 @@ export const adminService = {
     },
 
     async getOrderById(id: string): Promise<any> {
-        const response = await api.get<ApiResponse<any>>(`/admin/orders/${id}`);
+        const response = await apiWithRetry.get(`/admin/orders/${id}`);
         return response.data.data;
     },
 
     async updateOrderStatus(id: string, status: string): Promise<any> {
-        const response = await api.post<ApiResponse<any>>(`/admin/orders/${id}`, { orderStatus: status });
+        const response = await apiWithRetry.post(`/admin/orders/${id}`, { orderStatus: status });
         return response.data.data;
     },
 
     async getProducts(params?: { page?: number; limit?: number; search?: string }): Promise<{ data: any[]; pagination: any }> {
-        const response = await api.get<ApiResponse<any[]>>('/admin/products', { params });
+        const response = await apiWithRetry.get('/admin/products', { params });
         return {
             data: response.data.data || [],
             pagination: (response.data as any).pagination
