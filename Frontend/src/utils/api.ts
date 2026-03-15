@@ -11,7 +11,6 @@ const api = axios.create({
         'Accept': 'application/json',
     },
     withCredentials: true,
-    timeout: 10000, // 10 second timeout
     decompress: true, // Enable gzip decompression
 });
 
@@ -36,6 +35,16 @@ api.interceptors.response.use(
     },
     (error) => {
 
+        // Handle cancelled requests
+        if (axios.isCancel(error)) {
+            console.log('Request cancelled:', error.message);
+            return Promise.reject({
+                success: false,
+                message: 'Request was cancelled',
+                isCancelled: true
+            });
+        }
+
         if (error.response) {
             // Handle specific error codes
             if (error.response.status === 401) {
@@ -49,10 +58,15 @@ api.interceptors.response.use(
             return Promise.reject(error.response.data);
         }
 
-        // Network error
+        // Network error or timeout
+        const errorMessage = (error as any).code === 'ECONNABORTED' 
+            ? 'Request timeout. Please try again.'
+            : 'Network error. Please check your connection.';
+            
         return Promise.reject({
             success: false,
-            message: 'Network error. Please check your connection.',
+            message: errorMessage,
+            isNetworkError: true
         });
     }
 );
